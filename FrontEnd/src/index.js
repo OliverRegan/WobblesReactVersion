@@ -9,9 +9,8 @@ import Routing from './components/Routing'
 
 // Redux
 import { Provider } from 'react-redux'
-import { createStore } from 'redux'
-import rootReducer from './redux/reducers'
-import store from './redux/reducers'
+import rootReducer from './redux'
+import store from './redux'
 
 
 document.title = 'Wobbly Wheels'

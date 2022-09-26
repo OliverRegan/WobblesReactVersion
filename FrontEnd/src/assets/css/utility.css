@@ -390,6 +390,22 @@ img {
 
 }
 
+.custom-btn:visited {
+    background-color: var(--main-secondary);
+    color: var(--main-light);
+    min-width: 10rem;
+    border: none;
+
+}
+
+.custom-btn:focus {
+    background-color: var(--main-secondary);
+    color: var(--main-light);
+    min-width: 10rem;
+    border: none;
+
+}
+
 .custom-btn:hover {
     background-color: var(--primary-hover);
     color: var(--main-light);

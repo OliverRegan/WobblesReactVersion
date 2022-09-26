@@ -5,6 +5,7 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const authorisation = require("./public/javascripts/authorisation")
 
 // Create routes
 const coachesRouter = require('./routes/coaches');
@@ -52,9 +53,9 @@ app.use((req, res, next) => {
 app.use('/coaches', coachesRouter);
 app.use('/lessons', lessonsRouter);
 app.use('/updates', updatesRouter);
-app.use('/users', usersRouter);
-app.use('/reviews', reviewsRouter);
-app.use('/booking', bookingRouter);
+app.use('/users', authorisation, usersRouter);
+app.use('/reviews', authorisation, reviewsRouter);
+app.use('/booking', authorisation, bookingRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

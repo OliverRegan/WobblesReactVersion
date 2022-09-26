@@ -1,7 +1,8 @@
 // React components
 import { useEffect, useState, useRef } from 'react'
 import { Helmet } from 'react-helmet';
-import { useParams } from 'react-router'
+import { useSelector } from 'react-redux';
+import { useParams, useNavigate } from 'react-router'
 
 // Image
 import lessonImg from "../../assets/img/lessons/Beginner-Court-Lesson.jpg"
@@ -28,12 +29,23 @@ const Booking = props => {
     const [lesson, setLesson] = useState([])
     // user data
     const [userLoading, setUserLoading] = useState(true)
-    const [user, setUser] = useState([])
     const [userSkaters, setUserSkaters] = useState()
     const [selectedSkaters, setSelectedSkaters] = useState([])
 
+    let user;
+    const selector = useSelector()
+    const navigate = useNavigate()
     // Fetch ID data for user
     useEffect(() => {
+
+        // Check if user is logged in, otherwise reroute to login
+        const loggedIn = selector((state) => state.loggedIn.value);
+
+        if (!loggedIn) {
+            navigate('/login');
+        }
+
+
         function getData() {
             fetch(("http://localhost:3001/lessons/" + id), {
                 method: 'GET',
@@ -49,26 +61,26 @@ const Booking = props => {
                         setLessonLoading(false)
                     })
                 })
-            fetch(("http://localhost:3001/users/" + props.loggedIn), {
-                method: 'GET',
-                headers: headers
-            })
-                .then((res) => {
-                    res.json().then((data) => ({
-                        data: data,
-                        status: res.status
-                    })).then(response => {
-                        setUser(response.data[0])
-                    }).finally(() => {
-                        setUserLoading(false)
+            // fetch(("http://localhost:3001/users/" + props.loggedIn), {
+            //     method: 'GET',
+            //     headers: headers
+            // })
+            //     .then((res) => {
+            //         res.json().then((data) => ({
+            //             data: data,
+            //             status: res.status
+            //         })).then(response => {
+            //             setUser(response.data[0])
+            //         }).finally(() => {
+            //             setUserLoading(false)
 
-                    })
-                })
+            //         })
+            //     })
         }
 
         getData();
 
-    }, [])
+    }, [useSelector, useNavigate])
 
     if (!userLoading && userSkaters == undefined) {
         setUserSkaters(user.userSkaters)
@@ -170,7 +182,9 @@ const Booking = props => {
                                         </div>
 
                                         <div className="col-5 my-3">
-                                            {userSkaters == undefined ? "" :
+                                            {userSkaters == undefined ?
+                                                <input type="text" className='form-control' disabled placeholder="No skaters on Your profile " />
+                                                :
                                                 <select className='form-control' name="skaters" ref={bookingSkaters} onChange={() => {
                                                     let tmp = [];
                                                     selectedSkaters.forEach((skater) => {
